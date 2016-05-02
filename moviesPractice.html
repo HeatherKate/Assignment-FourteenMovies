@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Movie's Cold-Code Practice Site</title>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<style>
+		.container-top {
+			margin: 20px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container container-top">
+		<p> This is a practice of the movies exercise. To see if I can cold-code this while on the airplane.</p>
+	</div>
+	<div class="container container-results">
+		<tr>
+			<td>The user with the most checkouts is:</td>
+			<td><span id="most-checkouts"></span></td>
+		</tr>
+		<tr>
+			<td>The month with the most checkouts is: </td>
+			<td><span id="most-month"></span></td>
+		</tr>
+	</div>
+	<script>
+		function loadDoc(uri, callback) {
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function () {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					callback.call(this, xmlhttp.responseText);
+				}
+			};
+			xmlhttp.open("GET", uri, true);
+			xmlhttp.send();
+		}
+		var rentalsArray;
+		var loadedRentals = function (rentalsJSON) {
+			rentalsArray = JSON.parse(rentalsJSON);
+			userFunction();
+		};
+		loadDoc("https://aerekos.herokuapp.com/getrentalsfile", loadedRentals);
+	</script>
+	<script>
+		function userFunction() {
+		// question 1:
+			
+			function makeSplitArray() {
+				var newArray = [];
+				for (var i = 0; i < rentalsArray.length; i++) {
+					console.log(rentalsArray);
+					newArray.push(rentalsArray[i].split(" "));
+				}
+				debugger;
+				console.log(newArray);
+				return newArray;
+			}
+
+			function getUsers(newArray) {
+				var userArray = [];
+				for (var i = 0; i < newArray.length; i++) {
+					userArray.push(newArray[i].user);
+				}
+				console.log(userArray);
+				return userArray;
+			}
+			
+//			getUsers(makeSplitArray(newArray));
+
+			function countUsers(userArray) {
+				var count = {};
+				for (var i = 0; i < userArray.length; i++) {
+					var userNum = userArray[i];
+					if (count[userNum] == undefined) {
+						count[userNum] = 1;
+					} else {
+						count[userNum] =+ 1;
+					}
+				}
+				console.log(count);
+				return count;
+			}
+			var storeCount = countUsers(getUsers());
+
+			function getUser(user) {
+				var maxSoFar = 0;
+				var maxKeySoFar = "";
+				for (var key in user) {
+					if (user[key] > maxSoFar) {
+						maxSoFar = user[key];
+						maxKeySoFar = key;
+					}
+				}
+				return user;
+			}
+			
+		// question 2:
+			
+			function getMonth (newArray) {
+				var monthArray = [];
+				for (var i = 0; i < newArray.length; i++) {
+					monthArray.push(newArray[i].month); 
+				} console.log (monthArray);
+					return monthArray;
+			}
+			
+			function countMonth (monthArray) {
+				var count = {};
+				for (var i = 0; i < monthArray.length; i++) {
+					var monthNum = monthArray[i];
+					if (count[monthNum] == undefined) {
+						count[monthNum] = 1;
+					} else {
+						count[monthNum] =+ 1;
+					} 
+				} console.log (count);
+					return count;
+			}
+			
+			var storeMonthCount = countMonth(getMonth());
+			
+			function getMostMonth (month) {
+				var maxMonthSoFar = 0;
+				var MaxKeyMonthSoFar ="";
+				for (var key in month) {
+					if (month[key] > maxMonthSoFar) {
+						maxMonthSoFar = month[key];
+						MaxKeyMonthSoFar = key;
+					}
+				} return month;
+			}
+			
+			document.getElementById("most-checkouts").innerHTML = user;
+			document.getElementById("most-month").innerHTML = month;
+		}
+	</script>
+</body>
+
+</html>
