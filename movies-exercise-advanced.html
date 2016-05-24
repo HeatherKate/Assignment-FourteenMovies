@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<title>Movie Rental Homework</title>
@@ -10,6 +11,7 @@
 		}
 	</style>
 </head>
+
 <body>
 	<div class="container container-top">
 		<p>Your competitor, MovieCo, has released even more data about their rentals in 2014! Now you have the information about which movies were the most popular.</p>
@@ -34,13 +36,13 @@
 	</div>
 	<script>
 		/********
-		 This is boilerplate code to retrieve the movies and rental data from the server.
-		 Don't worry about how it works just yet (although you're welcome to read it).
-		 Head on down to "userFunction" below, which is where you'll write your code.
-		********/
+						 This is boilerplate code to retrieve the movies and rental data from the server.
+						 Don't worry about how it works just yet (although you're welcome to read it).
+						 Head on down to "userFunction" below, which is where you'll write your code.
+						********/
 		function loadDoc(uri, callback) {
 			var xmlhttp = new XMLHttpRequest();
-			xmlhttp.onreadystatechange = function() {
+			xmlhttp.onreadystatechange = function () {
 				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 					callback.call(this, xmlhttp.responseText);
 				}
@@ -49,14 +51,14 @@
 			xmlhttp.send();
 		}
 		var rentalsArray, moviesArray, loadedCount = 0;
-		var loadedRentals = function(rentalsJSON) {
+		var loadedRentals = function (rentalsJSON) {
 			rentalsArray = JSON.parse(rentalsJSON);
 			loadedCount += 1;
 			if (loadedCount == 2) {
 				userFunction();
 			}
 		};
-		var loadedMovies = function(moviesJSON) {
+		var loadedMovies = function (moviesJSON) {
 			moviesArray = JSON.parse(moviesJSON);
 			loadedCount += 1;
 			if (loadedCount == 2) {
@@ -68,51 +70,172 @@
 	</script>
 	<script>
 		function userFunction() {
-	// question 1:		
-			function getMovieArray () {
-				
+
+			// Question 1: Which movie was the most checked-out movie of 2014?
+
+			function makeObject(username, movie, month) {
+				this.username = username;
+				this.movie = movie;
+				this.month = month;
 			}
-			
-			function countMovies () {
-				
-			}
-			
-			function returnMostMovie () {
-				
-			}
-			
-	// question 2:
-			
-			function returnLeastMovie () {
-				
-			}
-			
-	// question 3:
-			
-			function makeSplitArray() {
-				var newArray = [];
+
+			function createObject() {
+				var objectArray = [];
+				var newArr = [];
 				for (var i = 0; i < rentalsArray.length; i++) {
-					newArray.push(rentalsArray[i].split(""));
+					newArr.push(rentalsArray[i].split(" "));
+					var current = newArr[i];
+					var occurence = new makeObject(current[0], current[1], current[2]);
+					objectArray.push(occurence);
 				}
-				console.log(newArray);
-				return newArray;
+				console.log(objectArray);
+				return objectArray;
+			}
+			// function splgulitUserRow(stringUser) {
+			// return stringUser.split(" ");}
+			// rentalsArray = rentalsArray.map(splitUserRow);
+			function findUser(objectArray) {
+				var userArray = [];
+				for (var i = 0; i < objectArray.length; i++) {
+					userArray.push(objectArray[i].username);
+				}
+				//				console.log(userArray);
+				return userArray;
+			}
+
+			function findMovie(objectArray) {
+				var movieArray = [];
+				for (var i = 0; i < objectArray.length; i++) {
+					movieArray.push(objectArray[i].movie);
+				}
+				//				console.log(movieArray);
+				return movieArray;
+			}
+
+			function countObj(objArray) {
+				var count = {};
+				for (var i = 0; i < objArray.length; i++) {
+					var objNum = objArray[i];
+					if (count[objNum] == undefined) {
+						count[objNum] = 1;
+					} else {
+						count[objNum] += 1;
+					}
+				}
+				//				console.log(count);
+				return count;
+			}
+			var countOfUsers = countObj(findUser(createObject()));
+			//			console.log(countOfUsers);
+
+			var countofMovie = countObj(findMovie(createObject()));
+
+			function getMax(obj) {
+				var maxSoFar = 0;
+				var maxKeySoFar = "";
+				for (var key in obj) {
+					if (obj[key] > maxSoFar) {
+						maxSoFar = obj[key];
+						maxKeySoFar = key;
+					}
+				}
+				return maxKeySoFar;
+			}
+
+			var maxUser = getMax(countOfUsers);
+
+			var maxMovie = getMax(countofMovie);
+
+			function splitArrays() {
+				var titlesArray = [];
+				for (var i = 0; i < moviesArray.length; i++) {
+					titlesArray.push(moviesArray[i].split(" "));
+				}
+				return titlesArray;
+			}
+			splitArrays();
+
+
+			function findMovieTitle(movieNumber, titlesArray) {
+				for (var i = 0; i < titlesArray.length; i++) {
+					if (titlesArray[i][0] == movieNumber) {
+						return titlesArray[i];
+					}
+				}
+			}
+
+			var getTitle = findMovieTitle(maxMovie, splitArrays());
+			console.log(getTitle);
+
+			// Question 2: Which movie was the least checked-out movie of 2014?
+
+			function getMin(obj) {
+				var minSoFar = Infinity;
+				var minKeySoFar = "";
+				for (var key in obj) {
+					if (obj[key] < minSoFar) {
+						minSoFar = obj[key];
+						minKeySoFar = key;
+					}
+				}
+				return minKeySoFar;
+			}
+
+			var minMovie = getMin(countofMovie);
+			console.log(minMovie);
+
+			var getLeastTitle = findMovieTitle(minMovie, splitArrays());
+			console.log(getLeastTitle);
+
+			// Question 3: For the user with the most checkouts, which movie did they checkout the most?
+
+			function getUserInfo(user, objectsArray) {
+				var userInfoArray = [];
+				for (var i = 0; i < objectsArray.length; i++) {
+					for (var key in objectsArray[i]) {
+						if (objectsArray[i].username == user) {
+							userInfoArray.push(objectsArray[i]);
+						}
+					}
+				}
+				return userInfoArray;
 			}
 			
-			function throwOutMonth () {
-				
+			var userInfo = getUserInfo(maxUser, createObject());
+			console.log(userInfo);
+			
+			function countMovie(userMovie) {
+				var count = {};
+				for (var i = 0; i < userMovie.length; i++) {
+					var objNum = userMovie[i].movie;
+					if (count[objNum] == undefined) {
+						count[objNum] = 1;
+					} else {
+						count[objNum] += 1;
+					}
+				}
+//								console.log(count);
+				return count;
 			}
 			
-			function isolateUser () {
-				
-			}
+			var mostMovie = getMax(countMovie(userInfo));
+//			console.log(mostMovie);
+//			console.log(countMovie(userInfo));
 			
-			function compareArray () {
-				
-			} 
+			var getUserTitle = findMovieTitle(mostMovie, splitArrays());
+//			console.log(getUserTitle);
+
 			
-			function returnMovie () {
-				
-			}
+
+			//			
+			//			function getMostUserInfo(user){
+			//				var userInfoArray = [ ];
+			//				for (var i = 0; i < rentalsArray.length; i++){
+			//					
+			//				}
+			//			}
+
+
 			/*
 				Again, here is where you'll write your code.
 
@@ -133,8 +256,8 @@
 			**/
 
 			//Let's see what's inside...
-			console.log(moviesArray);
-			console.log(rentalsArray);
+			//			console.log(moviesArray);
+//			console.log(rentalsArray);
 
 			/*
 				A hint: Think about how to index your movie names so that it's easy to
@@ -142,14 +265,15 @@
 			*/
 
 			//Which movie was the most checked-out movie of 2014?
-			document.getElementById('most-movie').innerHTML = "???";
+			document.getElementById('most-movie').innerHTML = getTitle;
 
 			//Which movie was the least checked-out movie of 2014?
-			document.getElementById('least-movie').innerHTML = "???";
+			document.getElementById('least-movie').innerHTML = getLeastTitle;
 
 			//For the user with the most checkouts, which movie did they checkout the most?
-			document.getElementById('favorite-movie').innerHTML = "???";
+			document.getElementById('favorite-movie').innerHTML = getUserTitle;
 		}
 	</script>
 </body>
+
 </html>

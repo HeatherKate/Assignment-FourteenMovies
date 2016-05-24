@@ -69,7 +69,7 @@
 					var current = newArr[i];
 					var occurence = new makeObject(current[0], current[1], current[2]);
 					objectArray.push(occurence);
-				}
+				} 
 				return objectArray;
 			}
 			// function splgulitUserRow(stringUser) {
@@ -84,43 +84,56 @@
 				return userArray;
 			}
 			
-			function countUsers(userArray) { 
+			function findMonth(objectArray) {
+				var monthArray = [];
+				for (var i = 0; i < objectArray.length; i++) {
+					monthArray.push(objectArray[i].month);
+				}
+				console.log(monthArray);
+				return monthArray;
+			}
+			
+			function countObj(objArray) { 
 				var count = {};
-				for (var i = 0; i < userArray.length; i++) {
-					var userNum = userArray[i];
-					console.log(userNum);
-					if (count[userNum] == undefined) {
-						count[userNum] = 1;
+				for (var i = 0; i < objArray.length; i++) {
+					var objNum = objArray[i];
+					if (count[objNum] == undefined) {
+						count[objNum] = 1;
 					} else {
-						count[userNum] += 1;
+						count[objNum] += 1;
 					}
 				} 
-
+				console.log(count);
 				return count;
 			}
-			var countOfUsers = countUsers(findUser(createObject()));
+			var countOfUsers = countObj(findUser(createObject()));
 			console.log(countOfUsers);
+			
+			var countofMonths = countObj(findMonth(createObject()));
 
-			function getUser(user) {
+			function getMax(obj) {
 				var maxSoFar = 0;
 				var maxKeySoFar = "";
-				for (var key in user) {
-					if (user[key] > maxSoFar) {
-						maxSoFar = user[key];
+				for (var key in obj) {
+					if (obj[key] > maxSoFar) {
+						maxSoFar = obj[key];
 						maxKeySoFar = key;
-					}
-				}
+					} console.log (maxKeySoFar);
+				} return maxKeySoFar;
 			}
+			
+			var maxUser = getMax(countOfUsers);
+			
 //			var mostCheckoutUser = getUser(userRentals);
 			//							console.log(newArr);
 
 			//			console.log(countUsers(rentalsArray) == "User6 ");
 			//			console.log(monthMostCheckouts(rentalsArray) == "October");
 			//Which user had the most checkouts.
-			document.getElementById('most-checkouts').innerHTML = "???";
+			document.getElementById('most-checkouts').innerHTML = maxUser;
 
 			//Which month has the most checkouts?
-			document.getElementById('most-month').innerHTML = "???";
+			document.getElementById('most-month').innerHTML = getMax(countofMonths);
 
 		}
 	</script>

@@ -51,10 +51,8 @@
 			function makeSplitArray() {
 				var newArray = [];
 				for (var i = 0; i < rentalsArray.length; i++) {
-					console.log(rentalsArray);
 					newArray.push(rentalsArray[i].split(" "));
 				}
-				debugger;
 				console.log(newArray);
 				return newArray;
 			}
@@ -68,7 +66,7 @@
 				return userArray;
 			}
 			
-//			getUsers(makeSplitArray(newArray));
+			getUsers(makeSplitArray());
 
 			function countUsers(userArray) {
 				var count = {};
